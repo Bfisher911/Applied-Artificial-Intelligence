@@ -1,0 +1,12 @@
+/* Ensures Tailwind's utility classes take precedence and applies base settings */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F8F9FA; /* Tailwind: bg-slate-100 or custom primary-bg */
+  color: #212529; /* Tailwind: text-slate-800 or custom primary-text */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
