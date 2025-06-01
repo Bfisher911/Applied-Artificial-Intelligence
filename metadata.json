@@ -1,4 +1,6 @@
 {
-  "name": "Interactive AI Textbook Chapter Generator",
-  "description": "Generates stunning and interactive HTML textbook chapters based on provided content, with a theme of Applied AI and Google Cloud."
+  "name": "Chapter 1: Orientation & AI Project Framing",
+  "description": "An empty app",
+  "requestFramePermissions": [],
+  "prompt": ""
 }

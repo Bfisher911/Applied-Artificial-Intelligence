@@ -1,12 +1,27 @@
-/* Ensures Tailwind's utility classes take precedence and applies base settings */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* index.css */
+html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent; /* Prevent tap highlight on mobile */
+}
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #F8F9FA; /* Tailwind: bg-slate-100 or custom primary-bg */
-  color: #212529; /* Tailwind: text-slate-800 or custom primary-text */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    /* Default font and colors are set in index.html <style> and Tailwind utilities */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+    outline: 3px solid #4285F4; /* Google Blue */
+    outline-offset: 2px;
+    border-radius: 2px; /* Optional: adds rounded corners to the outline */
+}
+
+/* Ensure blockquotes are styled if they appear */
+blockquote {
+  border-left: 4px solid #cbd5e1; /* slate-300 */
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  color: #475569; /* slate-600 */
 }
