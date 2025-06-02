@@ -25,86 +25,6 @@ Key features of Vertex AI that you will become familiar with include:
 const chapterTextContent = `Chapter 1: Orientation & AI Project Framing
 Welcome to the starting line of your applied AI journey! This initial chapter is dedicated to laying a robust and essential foundation for all the exciting work that lies ahead. Before we immerse ourselves in the intricacies of specific algorithms or harness the immense power of cloud computing, it is crucial to understand how to approach an Artificial Intelligence project from its very inception. To that end, we will embark on an exploration of the complete AI project life cycle, providing you with a clear roadmap from an initial idea to a deployed solution. A significant focus will be on developing the critical skill of translating often vague business needs or challenges into concrete, measurable AI problems with well-defined objectives. Furthermore, this chapter will serve as your introduction to the essential tools that will be your companions throughout this course: Google Cloud Platform (GCP) and its powerful AI platform, Vertex AI. Most importantly, this chapter officially kicks off your semester-long capstone project, guiding you through the pivotal first step: clearly defining your project's scope and crafting a compelling, well-structured proposal. By the end of this chapter, you will not only grasp the foundational concepts but also take concrete steps towards realizing your own AI solution.
 
-// Data structures for managing chapters
-interface Chapter {
-    id: string;
-    title: string; // Short title for navigation
-    content: string; // Full text content including "Chapter X: Full Title"
-}
-
-const chapters: Chapter[] = [
-    {
-        id: 'ch0',
-        title: 'Ch 0: Introduction',
-        content: chapter0TextContent
-    },
-    {
-        id: 'ch1',
-        title: 'Ch 1: Orientation',
-        content: chapterTextContent // This was the original chapterTextContent variable
-    }
-];
-
-let currentChapterId = 'ch1'; // Default to Chapter 1
-
-const MAIN_CHAPTER_NAV_ID = 'main-chapter-nav-container';
-
-// Renders the main chapter navigation links
-function renderMainChapterNavigation(chaptersData: Chapter[], currentChapId: string, sidebarNavElement: HTMLElement) {
-    let mainChapterNavContainer = document.getElementById(MAIN_CHAPTER_NAV_ID);
-
-    // Create container and heading if they don't exist
-    if (!mainChapterNavContainer) {
-        mainChapterNavContainer = document.createElement('div');
-        mainChapterNavContainer.id = MAIN_CHAPTER_NAV_ID;
-        // Styling for the container: padding, margin, border
-        mainChapterNavContainer.className = 'pt-2 pb-4 mb-4 border-b border-slate-200';
-
-        const heading = document.createElement('h3');
-        // Styling for the "Chapters" heading
-        heading.className = 'px-6 mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase';
-        heading.textContent = 'Chapters';
-        mainChapterNavContainer.appendChild(heading);
-
-        const tocList = document.getElementById('table-of-contents-list');
-        if (tocList) {
-            // Insert the main chapter navigation before the sub-chapter table of contents
-            sidebarNavElement.insertBefore(mainChapterNavContainer, tocList);
-        } else {
-            // Fallback if tocList isn't there (e.g., if sidebar structure changes)
-            sidebarNavElement.appendChild(mainChapterNavContainer);
-        }
-    }
-
-    // Clear only previous chapter links, keep the container and "Chapters" heading
-    const existingLinks = mainChapterNavContainer.querySelectorAll('a.main-chapter-link');
-    existingLinks.forEach(link => link.remove());
-
-    // Create and append links for each chapter
-    chaptersData.forEach(chapter => {
-        const link = document.createElement('a');
-        link.href = '#'; // Prevent page jump, actual navigation handled by JS
-        link.textContent = chapter.title;
-        link.setAttribute('data-chapter-id', chapter.id);
-        // Base classes for all main chapter links
-        link.className = 'main-chapter-link block py-2 px-6 text-slate-600 hover:bg-slate-100 hover:text-blue-600 text-sm font-medium';
-
-        if (chapter.id === currentChapId) {
-            link.classList.add('active-main-chapter-link'); // Apply active style
-        }
-
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const newChapterId = link.getAttribute('data-chapter-id');
-            if (newChapterId && newChapterId !== currentChapterId) {
-                currentChapterId = newChapterId; // Update global state
-                displayChapter(currentChapterId); // Re-render content for the new chapter
-            }
-        });
-        mainChapterNavContainer.appendChild(link); // Append to the main chapter navigation container
-    });
-}
-
 Learning Objectives for this Chapter:
 Upon successful completion of this chapter and its associated Module 1 activities, you will be well-equipped to:
 
@@ -301,6 +221,87 @@ By now, you should have a much clearer picture of what an end-to-end cloud AI so
 
 Looking Ahead:
 With your project proposal taking shape and your cloud environment initiated, our focus in Chapter 2 (Module 2), titled "Data Acquisition & Pipeline Design," will shift to the practicalities of sourcing and ingesting the data that will fuel your AI model. In the upcoming chapter, you will learn how to securely upload your datasets to Google Cloud Storage, organize your data effectively within the cloud, and formally register these datasets with Vertex AI. This will make your data ready for the subsequent, critical stages of cleaning, labeling, feature engineering, and ultimately, model training. The journey into the data-centric aspects of your AI project begins now!
+`;
+
+// Data structures for managing chapters
+interface Chapter {
+    id: string;
+    title: string; // Short title for navigation
+    content: string; // Full text content including "Chapter X: Full Title"
+}
+
+const chapters: Chapter[] = [
+    {
+        id: 'ch0',
+        title: 'Ch 0: Introduction',
+        content: chapter0TextContent
+    },
+    {
+        id: 'ch1',
+        title: 'Ch 1: Orientation',
+        content: chapterTextContent // This was the original chapterTextContent variable
+    }
+];
+
+let currentChapterId = 'ch1'; // Default to Chapter 1
+
+const MAIN_CHAPTER_NAV_ID = 'main-chapter-nav-container';
+
+// Renders the main chapter navigation links
+function renderMainChapterNavigation(chaptersData: Chapter[], currentChapId: string, sidebarNavElement: HTMLElement) {
+    let mainChapterNavContainer = document.getElementById(MAIN_CHAPTER_NAV_ID);
+
+    // Create container and heading if they don't exist
+    if (!mainChapterNavContainer) {
+        mainChapterNavContainer = document.createElement('div');
+        mainChapterNavContainer.id = MAIN_CHAPTER_NAV_ID;
+        // Styling for the container: padding, margin, border
+        mainChapterNavContainer.className = 'pt-2 pb-4 mb-4 border-b border-slate-200';
+
+        const heading = document.createElement('h3');
+        // Styling for the "Chapters" heading
+        heading.className = 'px-6 mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase';
+        heading.textContent = 'Chapters';
+        mainChapterNavContainer.appendChild(heading);
+
+        const tocList = document.getElementById('table-of-contents-list');
+        if (tocList) {
+            // Insert the main chapter navigation before the sub-chapter table of contents
+            sidebarNavElement.insertBefore(mainChapterNavContainer, tocList);
+        } else {
+            // Fallback if tocList isn't there (e.g., if sidebar structure changes)
+            sidebarNavElement.appendChild(mainChapterNavContainer);
+        }
+    }
+
+    // Clear only previous chapter links, keep the container and "Chapters" heading
+    const existingLinks = mainChapterNavContainer.querySelectorAll('a.main-chapter-link');
+    existingLinks.forEach(link => link.remove());
+
+    // Create and append links for each chapter
+    chaptersData.forEach(chapter => {
+        const link = document.createElement('a');
+        link.href = '#'; // Prevent page jump, actual navigation handled by JS
+        link.textContent = chapter.title;
+        link.setAttribute('data-chapter-id', chapter.id);
+        // Base classes for all main chapter links
+        link.className = 'main-chapter-link block py-2 px-6 text-slate-600 hover:bg-slate-100 hover:text-blue-600 text-sm font-medium';
+
+        if (chapter.id === currentChapId) {
+            link.classList.add('active-main-chapter-link'); // Apply active style
+        }
+
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const newChapterId = link.getAttribute('data-chapter-id');
+            if (newChapterId && newChapterId !== currentChapterId) {
+                currentChapterId = newChapterId; // Update global state
+                displayChapter(currentChapterId); // Re-render content for the new chapter
+            }
+        });
+        mainChapterNavContainer.appendChild(link); // Append to the main chapter navigation container
+    });
+}
 `;
 
 interface ContentItem {
