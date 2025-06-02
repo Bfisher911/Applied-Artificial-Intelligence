@@ -3,9 +3,107 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Content for Chapter 0 (Introduction)
+const chapter0TextContent = `Chapter 0: Introduction: The Applied AI Revolution
+Welcome to the dynamic and transformative world of Applied Artificial Intelligence! You are embarking on a journey into a field that is rapidly moving beyond futuristic concepts to deliver tangible, impactful solutions that are being built and deployed today. This textbook, "Applied Artificial Intelligence: From Business Case to Cloud Deployment," is designed to be your comprehensive guide through this exciting landscape. Our core mission is to equip you with both the practical, hands-on skills and the foundational conceptual understanding necessary to turn innovative AI ideas into functional, real-world applications. This book will not only show you what is possible but will empower you to do it.
+
+A. What is Applied Artificial Intelligence?
+Artificial Intelligence (AI), in its broadest sense, has been a field of study and development for decades, encompassing a wide spectrum of activities from fundamental academic research into the nature of intelligence to the creation of highly complex algorithms. Applied Artificial Intelligence, the focus of our exploration, narrows this vast domain to the practical implementation of these diverse AI techniques to solve specific, real-world problems. It represents the crucial intersection where theoretical knowledge meets practical execution, where algorithms translate into actual outcomes, and where intelligent systems begin to deliver measurable and meaningful value.
+
+[KEY TAKEAWAY]: Applied AI is the practical application of AI techniques to solve real-world problems, focusing on the entire lifecycle from data to deployed solution and measurable value. It emphasizes tangible outcomes and the effective use of tools and platforms.
+
+1. Problem Definition & Business Case
+This initial phase is arguably the most critical. It begins with thoroughly understanding the need: What precise problem are we attempting to solve? Who are the primary stakeholders, and what are their expectations? Key activities include conducting stakeholder interviews, analyzing existing processes to identify pain points, and rigorously defining objectives. Success must be quantifiable, which involves establishing clear, measurable Key Performance Indicators (KPIs).
+
+Key features of Vertex AI that you will become familiar with include:
+- A Unified Interface and API that simplifies the management of datasets, training jobs, model versions, deployed endpoints, and monitoring tasks from a central location.
+- Access to powerful Pre-trained APIs for common AI tasks, such as vision analysis (e.g., image recognition, object detection), natural language processing (e.g., sentiment analysis, entity extraction), and translation, allowing you to incorporate sophisticated AI capabilities into applications with minimal custom model development.
+- Robust support for Custom Training, giving you full control to train your own models using popular machine learning frameworks like TensorFlow, PyTorch, and scikit-learn, leveraging GCP's scalable training infrastructure.
+`;
+
 // Updated Chapter Content
 const chapterTextContent = `Chapter 1: Orientation & AI Project Framing
 Welcome to the starting line of your applied AI journey! This initial chapter is dedicated to laying a robust and essential foundation for all the exciting work that lies ahead. Before we immerse ourselves in the intricacies of specific algorithms or harness the immense power of cloud computing, it is crucial to understand how to approach an Artificial Intelligence project from its very inception. To that end, we will embark on an exploration of the complete AI project life cycle, providing you with a clear roadmap from an initial idea to a deployed solution. A significant focus will be on developing the critical skill of translating often vague business needs or challenges into concrete, measurable AI problems with well-defined objectives. Furthermore, this chapter will serve as your introduction to the essential tools that will be your companions throughout this course: Google Cloud Platform (GCP) and its powerful AI platform, Vertex AI. Most importantly, this chapter officially kicks off your semester-long capstone project, guiding you through the pivotal first step: clearly defining your project's scope and crafting a compelling, well-structured proposal. By the end of this chapter, you will not only grasp the foundational concepts but also take concrete steps towards realizing your own AI solution.
+
+// Data structures for managing chapters
+interface Chapter {
+    id: string;
+    title: string; // Short title for navigation
+    content: string; // Full text content including "Chapter X: Full Title"
+}
+
+const chapters: Chapter[] = [
+    {
+        id: 'ch0',
+        title: 'Ch 0: Introduction',
+        content: chapter0TextContent
+    },
+    {
+        id: 'ch1',
+        title: 'Ch 1: Orientation',
+        content: chapterTextContent // This was the original chapterTextContent variable
+    }
+];
+
+let currentChapterId = 'ch1'; // Default to Chapter 1
+
+const MAIN_CHAPTER_NAV_ID = 'main-chapter-nav-container';
+
+// Renders the main chapter navigation links
+function renderMainChapterNavigation(chaptersData: Chapter[], currentChapId: string, sidebarNavElement: HTMLElement) {
+    let mainChapterNavContainer = document.getElementById(MAIN_CHAPTER_NAV_ID);
+
+    // Create container and heading if they don't exist
+    if (!mainChapterNavContainer) {
+        mainChapterNavContainer = document.createElement('div');
+        mainChapterNavContainer.id = MAIN_CHAPTER_NAV_ID;
+        // Styling for the container: padding, margin, border
+        mainChapterNavContainer.className = 'pt-2 pb-4 mb-4 border-b border-slate-200';
+
+        const heading = document.createElement('h3');
+        // Styling for the "Chapters" heading
+        heading.className = 'px-6 mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase';
+        heading.textContent = 'Chapters';
+        mainChapterNavContainer.appendChild(heading);
+
+        const tocList = document.getElementById('table-of-contents-list');
+        if (tocList) {
+            // Insert the main chapter navigation before the sub-chapter table of contents
+            sidebarNavElement.insertBefore(mainChapterNavContainer, tocList);
+        } else {
+            // Fallback if tocList isn't there (e.g., if sidebar structure changes)
+            sidebarNavElement.appendChild(mainChapterNavContainer);
+        }
+    }
+
+    // Clear only previous chapter links, keep the container and "Chapters" heading
+    const existingLinks = mainChapterNavContainer.querySelectorAll('a.main-chapter-link');
+    existingLinks.forEach(link => link.remove());
+
+    // Create and append links for each chapter
+    chaptersData.forEach(chapter => {
+        const link = document.createElement('a');
+        link.href = '#'; // Prevent page jump, actual navigation handled by JS
+        link.textContent = chapter.title;
+        link.setAttribute('data-chapter-id', chapter.id);
+        // Base classes for all main chapter links
+        link.className = 'main-chapter-link block py-2 px-6 text-slate-600 hover:bg-slate-100 hover:text-blue-600 text-sm font-medium';
+
+        if (chapter.id === currentChapId) {
+            link.classList.add('active-main-chapter-link'); // Apply active style
+        }
+
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const newChapterId = link.getAttribute('data-chapter-id');
+            if (newChapterId && newChapterId !== currentChapterId) {
+                currentChapterId = newChapterId; // Update global state
+                displayChapter(currentChapterId); // Re-render content for the new chapter
+            }
+        });
+        mainChapterNavContainer.appendChild(link); // Append to the main chapter navigation container
+    });
+}
 
 Learning Objectives for this Chapter:
 Upon successful completion of this chapter and its associated Module 1 activities, you will be well-equipped to:
@@ -206,6 +304,11 @@ With your project proposal taking shape and your cloud environment initiated, ou
 `;
 
 interface ContentItem {
+    // type: 'h1' | 'h2' | 'h3' | 'p' | 'ul' | 'ol' | 'callout' | 'knowledge-check-q' | 'knowledge-check-a' | 'pre';
+    // text: string;
+    // For H3, ensure the search block correctly captures the content.
+    // The actual ContentItem interface is much longer. I'm only showing a snippet for brevity.
+    // Make sure the SEARCH block is precise.
     type: 'h1' | 'h2' | 'h3' | 'p' | 'ul' | 'ol' | 'callout' | 'knowledge-check-q' | 'knowledge-check-a' | 'pre';
     text: string;
     level?: number; // For headings
@@ -675,16 +778,47 @@ function setupInteractivity(navSections: NavSection[]) {
     if (yearEl) yearEl.textContent = new Date().getFullYear().toString();
 }
 
+// Main function to display a chapter
+function displayChapter(chapterId: string) {
+    currentChapterId = chapterId; // Ensure global state is updated
+    const chapterToDisplay = chapters.find(c => c.id === chapterId);
 
-document.addEventListener('DOMContentLoaded', () => {
+    const sidebarNavElement = document.getElementById('sidebar-nav') as HTMLElement | null;
+    if (!sidebarNavElement) {
+        console.error("Sidebar navigation element (#sidebar-nav) not found.");
+        return;
+    }
+    // Render/update main chapter navigation, passing the current chapterId for active state
+    renderMainChapterNavigation(chapters, currentChapterId, sidebarNavElement);
+
     const mainContentEl = document.getElementById('chapter-content-container');
-    const navEl = document.getElementById('table-of-contents-list');
+    const navEl = document.getElementById('table-of-contents-list'); // For sub-chapter navigation
 
+    if (!chapterToDisplay) {
+        console.error(`Chapter with id ${chapterId} not found.`);
+        if (mainContentEl) mainContentEl.innerHTML = '<p class="text-red-500 p-4">Chapter content not found.</p>';
+        if (navEl) navEl.innerHTML = ''; // Clear sub-chapter navigation
+        // Update titles to reflect error or default state
+        const mobileTitleEl = document.getElementById('mobile-chapter-title');
+        if (mobileTitleEl) mobileTitleEl.textContent = "Error";
+        const sidebarMainTitleEl = document.getElementById('sidebar-main-title');
+        if (sidebarMainTitleEl) sidebarMainTitleEl.textContent = "Error";
+        return;
+    }
+
+    // Proceed if chapter content and DOM elements are found
     if (mainContentEl && navEl) {
-        const parsedContent = parseChapterText(chapterTextContent);
+        const parsedContent = parseChapterText(chapterToDisplay.content);
+        // renderChapter populates mainContentEl (chapter text) and navEl (sub-chapter ToC)
         const navSections = renderChapter(parsedContent, mainContentEl, navEl);
+        // setupInteractivity handles scroll-spying for the sub-chapter ToC
         setupInteractivity(navSections);
     } else {
-        console.error('Required DOM elements not found for chapter rendering.');
+        console.error('Required DOM elements for chapter content (#chapter-content-container) or sub-navigation (#table-of-contents-list) not found.');
     }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial display of the default chapter
+    displayChapter(currentChapterId);
 });
